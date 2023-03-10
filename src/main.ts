@@ -9,6 +9,7 @@ async function bootstrap() {
     .setDescription('The Help Pet API description')
     .setVersion('1.0')
     .addTag('help-pet')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

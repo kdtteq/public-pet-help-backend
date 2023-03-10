@@ -1,9 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type AnimalDocument = HydratedDocument<Animal>;
-@Schema()
+@Schema({ timestamps: true })
 export class Animal {
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  userId: string;
+
   @Prop({ required: true })
   name: string;
 
@@ -30,6 +33,15 @@ export class Animal {
 
   @Prop()
   last_known_location: string; // 最後一次被發現的地點、走丟地點
+
+  @Prop({ default: '' })
+  coordinate?: string; // 最後一次被發現的地點、走丟地點的座標
+
+  @Prop({ default: '' })
+  image_url?: string; // 動物的圖片
+
+  @Prop({ default: '' })
+  info_content: string;
 }
 
 export const AnimalSchema = SchemaFactory.createForClass(Animal);

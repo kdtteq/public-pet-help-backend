@@ -1,7 +1,9 @@
 import { Type } from 'class-transformer';
-import { IsPhoneNumber, IsString, IsNumber } from 'class-validator';
-
+import { IsString, IsNumber, IsMongoId, IsOptional } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
 export class CreateAnimalDto {
+  @IsMongoId()
+  userId: string;
   @IsString()
   name: string;
 
@@ -29,4 +31,15 @@ export class CreateAnimalDto {
 
   @IsString()
   last_known_location: string; // 最後一次被發現的地點、走丟地點
+
+  @IsString()
+  coordinate?: string; // 最後一次被發現的地點、走丟地點的座標
+
+  image_url?: string; // 動物的圖片
+
+  @IsString()
+  @IsOptional()
+  info_content: string;
 }
+
+export class UpdateAnimalDto extends PartialType(CreateAnimalDto) {}

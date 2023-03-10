@@ -17,3 +17,15 @@ export class CreateUserDto {
   @IsPhoneNumber('TW')
   phone: string;
 }
+
+export class Test {
+  email?: string;
+}
+
+export class LoginDto {
+  @IsString()
+  email: string;
+
+  @IsString()
+  password: string;
+}
