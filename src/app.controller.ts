@@ -17,15 +17,4 @@ export class AppController {
     console.log(process.env.NODE_ENV);
     return process.env.NODE_ENV;
   }
-  @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
-  async login(@Request() req) {
-    return await this.authService.login(req.user);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
 }

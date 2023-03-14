@@ -13,6 +13,6 @@ import { AnimalService } from './animal.service';
   ],
   controllers: [AnimalController],
   providers: [AnimalService, AnimalRepository],
-  exports: [AnimalRepository],
+  exports: [AnimalRepository, AnimalService],
 })
 export class AnimalModule {}

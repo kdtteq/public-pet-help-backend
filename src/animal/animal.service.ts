@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { AnimalRepository } from 'src/repositories/animal.repository';
 import { Animal } from 'src/schemas/animal.schema';
-import { CreateAnimalDto } from './dto/animal.dto';
+import {
+  CreateAnimalDto,
+  CreateAnimalDtoWithImageFile,
+} from './dto/animal.dto';
 import { UploadService } from 'src/upload/upload.service';
 
 @Injectable()
@@ -12,14 +15,16 @@ export class AnimalService {
   ) {}
   async createAnimal(
     animal: CreateAnimalDto,
-    image: Express.Multer.File,
+    image?: Express.Multer.File,
   ): Promise<Animal> {
-    const url = image ? await this.uploadService.uploadImage(image.buffer) : '';
+    const url = image
+      ? await this.uploadService.uploadImage(image.buffer)
+      : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSgQFqDgpwexKbqh51l2Kdgfk3mpAdIcSGTw&usqp=CAU';
     animal.image_url = url;
     return this.animalRepository.create(animal);
   }
-  async getAllAnimals(): Promise<Animal[]> {
-    return this.animalRepository.findAll();
+  async getAllAnimals({ filter = {}, projection = {} }): Promise<Animal[]> {
+    return this.animalRepository.findAll(filter ?? {}, projection ?? {});
   }
   async getAnimalById(id: any): Promise<Animal> {
     const animal = await this.animalRepository.findOne({

@@ -17,7 +17,7 @@ export class AuthService {
     const user = await this.userService.findOne(email);
     if (user && (await bcrypt.compare(pass, user.password))) {
       const { password, ...result } = user;
-      return result;
+      return user;
     }
     if (!user) {
       throw new NotFoundException('User not found');
@@ -28,10 +28,9 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { useremail: user.email, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async generateToken(user: any) {
+    const payload = { useremail: user.email, sub: user._id.toString() };
+    const token = await this.jwtService.signAsync(payload);
+    return token;
   }
 }

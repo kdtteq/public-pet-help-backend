@@ -1,9 +1,7 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsPhoneNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
-  @IsString()
-  account: string;
-
   @IsString()
   name: string;
 
@@ -13,6 +11,7 @@ export class CreateUserDto {
   @IsString()
   password: string;
 
+  @ApiProperty({ description: '手機號碼，格式為 09xxxxxxxx', type: 'string' })
   @IsString()
   @IsPhoneNumber('TW')
   phone: string;

@@ -1,7 +1,5 @@
 # 指定 Node.js 版本
-FROM --platform=linux/amd64 node:16
-
-
+FROM  node:16-alpine as install
 
 # 設置工作目錄
 WORKDIR /app
@@ -11,11 +9,18 @@ COPY package.json yarn.lock ./
 
 # 安裝依賴
 RUN yarn install --silents
-
-# 複製所有文件到映像中
 COPY . .
 
+FROM  node:16-alpine  as build
+WORKDIR /app
+COPY --from=install /app .
+
 RUN yarn build
+
+FROM  node:16-alpine 
+WORKDIR /app
+
+COPY --from=build /app .
 # 執行應用程序
 CMD [ "yarn", "start" ]
 
@@ -23,3 +28,6 @@ CMD [ "yarn", "start" ]
 RUN yarn cache clean \
   && rm -rf /tmp/* /var/cache/apk/* \
   && rm -rf /root/.npm /root/.node-gyp
+
+
+# --platform=linux/amd64

@@ -6,8 +6,6 @@ export type UserDocument = HydratedDocument<User>;
 export class User {
   @Prop({ type: Types.ObjectId, default: () => new Types.ObjectId() })
   _id?: string;
-  @Prop({ required: true })
-  account: string;
 
   @Prop()
   name: string;

@@ -5,7 +5,6 @@ import {
   Get,
   Param,
   Post,
-  Query,
   UploadedFile,
   UseInterceptors,
   UsePipes,
@@ -13,31 +12,57 @@ import {
 } from '@nestjs/common';
 import { Animal } from 'src/schemas/animal.schema';
 import { AnimalService } from './animal.service';
-import { CreateAnimalDto } from './dto/animal.dto';
+import {
+  CreateAnimalDtoWithImageFile,
+  RetrieveAnimalsDto,
+} from './dto/animal.dto';
 import { Types } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiParam, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('Animal')
 @Controller('animal')
 export class AnimalController {
   constructor(private readonly animalService: AnimalService) {}
-
   @Post()
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('image_file'))
   @UsePipes(new ValidationPipe())
+  @ApiOperation({ description: '新增單筆動物資料' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: CreateAnimalDtoWithImageFile })
   async createAnimal(
-    @Body() createAnimalDto: CreateAnimalDto,
-    @UploadedFile() image: Express.Multer.File,
+    @Body() createAnimalDto: CreateAnimalDtoWithImageFile,
+    @UploadedFile() image_file: Express.Multer.File,
   ): Promise<Animal> {
-    return this.animalService.createAnimal(createAnimalDto, image);
+    return this.animalService.createAnimal(createAnimalDto, image_file);
   }
-  @Get('/all')
-  async getAllAnimals(): Promise<Animal[]> {
-    return this.animalService.getAllAnimals();
+
+  @ApiOperation({ description: '取得所有動物資料' })
+  @Post('/all')
+  @ApiBody({
+    description:
+      '這邊也可以不帶值，基本上就是讓前端可以決定要用什麼條件撈，撈出來的資料也可以決定要撈哪些欄位',
+    schema: {
+      example: { filter: { animal_type: 'dog' }, projection: { name: 1 } },
+    },
+    required: false,
+  })
+  async getAllAnimals(
+    @Body()
+    condition?: RetrieveAnimalsDto,
+  ): Promise<Animal[]> {
+    return this.animalService.getAllAnimals(condition);
   }
 
   @Get(':id')
-  @ApiQuery({ name: 'animalId', type: String })
+  @ApiParam({ name: 'id', type: String, description: '動物在 db 內的 id' })
   async getAnimalById(@Param() param): Promise<Animal> {
     if (!Types.ObjectId.isValid(param.id)) {
       throw new BadRequestException('Invalid ObjectId');

@@ -11,7 +11,8 @@ export class UserService {
     private readonly animalRepository: AnimalRepository,
   ) {}
   getHello(): string {
-    return 'Hello World123!';
+    const helloWrorld = 'Hello World!';
+    return helloWrorld;
   }
 
   async createUser(user: CreateUserDto): Promise<any> {
@@ -22,7 +23,6 @@ export class UserService {
     user.password = await bcrypt.hash(user.password, 10);
     return await this.userRepository.create(user);
   }
-
   async findOne(email: string) {
     const userInfo = await this.userRepository.findOne(email);
     return userInfo;
