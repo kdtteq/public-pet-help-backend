@@ -27,6 +27,11 @@ import { UploadModule } from './upload/upload.module';
     AnimalModule,
     UploadModule,
     SeedsModule,
+    // CacheModule.register<RedisClientOptions>({
+    //   store: redisStore,
+    //   host: 'localhost',
+    //   port: 6379,
+    // }),
   ],
   controllers: [AppController],
   providers: [AppService],

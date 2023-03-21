@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AnimalRepository } from 'src/repositories/animal.repository';
 import { Animal } from 'src/schemas/animal.schema';
-import {
-  CreateAnimalDto,
-  CreateAnimalDtoWithImageFile,
-} from './dto/animal.dto';
+import { CreateAnimalDto } from './dto/animal.dto';
 import { UploadService } from 'src/upload/upload.service';
 
 @Injectable()

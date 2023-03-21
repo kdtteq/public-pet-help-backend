@@ -12,8 +12,7 @@ import { ModuleRef } from '@nestjs/core';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
-import { LocalAuthGuard } from 'src/auth/guard/local-auth.guard';
-import { CreateUserDto, LoginDto, Test } from './dto/user.dto';
+import { CreateUserDto, LoginDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
 // api category User

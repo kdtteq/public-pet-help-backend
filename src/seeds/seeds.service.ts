@@ -34,12 +34,18 @@ export class SeedsService {
 
     // 種類,體型,顏色,照片,發現座標,內容
     const animalArray = Array<Promise<Animal>>(count);
+    enum AnimalType {
+      '狗狗',
+      '貓貓',
+    }
     for (let i = 0; i < count; i++) {
       animalArray[i] = this.animalService.createAnimal({
         userId: checkAdminExist._id.toString(),
         name: faker.name.firstName(),
         age: Number(faker.random.numeric(1)),
-        animal_type: 'dog',
+        animal_type: Object.values(AnimalType)[
+          Math.floor(Math.random() * 2)
+        ] as string,
         image_url:
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSgQFqDgpwexKbqh51l2Kdgfk3mpAdIcSGTw&usqp=CAU',
         info_content: faker.lorem.paragraph(),
